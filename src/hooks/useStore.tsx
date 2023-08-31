@@ -23,8 +23,17 @@ const reducer = (state: State, action: Action) => {
         ...state,
         todos: [...state.todos, ...action.payload],
       };
-    case "DELETE_TODO":
-      throw new Error("Not implemented!!!");
+    case "DELETE_TODO": {
+      const idx = state.todos.findIndex(
+        (todo) => todo.id === action.payload[0].id
+      );
+      const todos = [...state.todos];
+      todos.splice(idx, 1);
+      return {
+        ...state,
+        todos,
+      };
+    }
     default:
       throw new Error("Unknown Action");
   }
