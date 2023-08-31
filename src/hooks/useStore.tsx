@@ -1,4 +1,4 @@
-import React, {
+import {
   createContext,
   useMemo,
   useReducer,
@@ -34,17 +34,16 @@ const makeStore = (
   reducer: (state: State, action: Action) => State,
   initialState: State
 ) => {
-  const todos: Todo[] = [];
-  const storeContext = createContext({ todos });
+  const storeContext = createContext<State>({ todos: [] });
   const dispatchContext = createContext<Dispatch<Action>>(
     {} as Dispatch<Action>
   );
 
-  const StoreProvider: React.FC<PropsWithChildren> = ({ children }) => {
+  const StoreProvider = ({ children }: PropsWithChildren) => {
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const memoState = useMemo(() => state, [state]);
-    const memoDispatch = useMemo(() => dispatch, [dispatch]);
+    const memoState = useMemo<State>(() => state, [state]);
+    const memoDispatch = useMemo<Dispatch<Action>>(() => dispatch, [dispatch]);
 
     return (
       <storeContext.Provider value={memoState}>
