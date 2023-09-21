@@ -5,33 +5,28 @@ const path = "/api/todos";
 const mocks = [
   { id: 1, name: "Asd1" },
   { id: 2, name: "Asd2" },
+  { id: 3, name: "Asd3" },
+  { id: 4, name: "Asd4" },
+  { id: 5, name: "Asd5" },
+  { id: 6, name: "Asd6" },
+  { id: 7, name: "Asd7" },
+  { id: 8, name: "Asd8" },
+  { id: 9, name: "Asd9" },
+  { id: 10, name: "Asd10" },
 ];
 
 export const handlers = [
-  //   rest.post(path, (req, res, ctx) => {
-  //     // Persist user's authentication in the session
-  //     sessionStorage.setItem("is-authenticated", "true");
-
-  //     return res(
-  //       // Respond with a 200 status code
-  //       ctx.status(200)
-  //     );
-  //   }),
-
   rest.get(path, (req, res, ctx) => {
-    // Check if the todos are in this session
-    const todos = sessionStorage.getItem("todos");
+    const params = req.url.searchParams;
+    const qs = params.get("q");
 
-    if (!todos) {
-      sessionStorage.setItem("todos", JSON.stringify(mocks));
-      return res(ctx.delay(2000), ctx.status(201), ctx.json(mocks));
+    let mockedData = mocks;
+    if (qs) {
+      mockedData = mocks.filter((md) =>
+        md.name.toLowerCase().includes(qs.toLowerCase())
+      );
     }
 
-    // Return a mocked todos from session
-    return res(
-      ctx.delay(500),
-      ctx.status(200),
-      ctx.json(JSON.parse(sessionStorage.getItem("todos")))
-    );
+    return res(ctx.delay(500), ctx.status(200), ctx.json(mockedData));
   }),
 ];
